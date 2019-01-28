@@ -1,0 +1,47 @@
+{
+    "test_1": {
+            "environment": "environments/env1.txt",
+            "solution": "solutions/test_1.solution",
+            "num_expansions": 212,
+            "start_x": 0,
+            "start_y": 0,
+            "goal_x": 14,
+            "goal_y": 15
+    },
+    "test_2": {
+            "environment": "environments/env1.txt",
+            "solution": "solutions/test_2.solution",
+            "num_expansions": 137,
+            "start_x": 13,
+            "start_y": 14,
+            "goal_x": 8,
+            "goal_y": 13
+    },
+    "test_3": {
+            "environment": "environments/env2.txt",
+            "solution": "solutions/test_3.solution",
+            "num_expansions": 5419,
+            "start_x": 3,
+            "start_y": 17,
+            "goal_x": 50,
+            "goal_y": 78
+    },
+    "test_4": {
+            "environment": "environments/env2.txt",
+            "solution": "solutions/test_4.solution",
+            "num_expansions": 13947,
+            "start_x": 45,
+            "start_y": 78,
+            "goal_x": 0,
+            "goal_y": 7
+    },
+    "test_5": {
+            "environment": "environments/env2.txt",
+            "solution": "solutions/test_5.solution",
+            "num_expansions": 49298,
+            "start_x": 10,
+            "start_y": 70,
+            "goal_x": 90,
+            "goal_y": 470
+    },
+}
