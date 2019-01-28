@@ -41,13 +41,13 @@ void Dijkstras::run_planner(
     int* num_expansions,
     std::vector<std::pair<int, int>> *path)
 {
-    // Create priority queue; I suggest using a set with a std::set with the
-    // custom comparator defined in dijkstra.h
+    // Create priority queue; I suggest using a set with with the custom
+    // comparator defined in dijkstra.h as your priority queue
     std::set<int> Q; // You will need to change this line
 
     // While the queue is not empty
     while (!Q.empty()) {
-        // Pop and expand the next node in the queue
+        // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
         // YOUR CODE HERE
