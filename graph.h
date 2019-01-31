@@ -97,6 +97,7 @@ class Graph {
     const int m_width;
     const int m_height;
 
+    // start and goal state ID
     int m_start_id;
     int m_goal_id;
 };
