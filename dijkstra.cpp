@@ -41,9 +41,14 @@ void Dijkstras::run_planner(
     int* num_expansions,
     std::vector<std::pair<int, int>> *path)
 {
-    // Create priority queue; I suggest using a set with with the custom
+    // Create priority queue; I suggest using a set with the custom
     // comparator defined in dijkstra.h as your priority queue
+   
     std::set<int> Q; // You will need to change this line
+
+/*
+    std::set<int, CostMapComparator> Q;
+*/
 
     // While the queue is not empty
     while (!Q.empty()) {
@@ -51,6 +56,9 @@ void Dijkstras::run_planner(
         (*num_expansions)++;
 
         // YOUR CODE HERE
+/*
+        
+*/
     }
 }
 
@@ -61,6 +69,47 @@ void Dijkstras::extract_path(
     std::vector<int> *path_state_ids)
 {
     // YOUR CODE HERE
+/*
+    int x, y;
+
+//I think I have to get the path backwards (i.e. from goal to start)
+
+    if (goal_id == start_id) {
+      return;
+    }
+
+    if (get coord_from_state_id(goal_id, &x, &y) {
+      // push goal_id
+      //check if x and why represents valid state?
+      (*path_state_ids).push_back(goal_id);
+    }
+
+    //ChildToParentMap is typedef for std::unordered_map<int, int>!
+    //maps child state id to parent state id
+    // what is the child_to parent_map doing exactly?
+    ChildToParentMap::iterator iter = child_to_parent_map.find(goal_id);
+
+    while (1) {
+      if (iter != child_to_parent_map.end()) {
+        // Should I remove the mapping?
+        std::string value = iter->second;
+
+        // do I need to check if the state id is valid?
+        (*path_state_ids).push_back(value);
+        child_to_parent_map.erase(iter);  // removes mapping from map if key is found
+
+        // will this work for the case when the start and goal are the same?
+
+        if (value == start_id) {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      iter = child_to_parent_map.find(value);
+    }
+*/
 }
 
 }
