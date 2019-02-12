@@ -37,12 +37,31 @@ namespace graphs {
 int Graph::set_start_state(const int& x, const int& y)
 {
     // YOUR CODE HERE
+/*
+    m_start_id = get_state_id(x, y);
+    
+    if (is_valid_state(m_start_id)) {
+      return m_start_id;  // valid state
+    } else {
+      return -1;  // invalid state
+    }
+*/
+
     return -1;
 }
 
 int Graph::set_goal_state(const int& x, const int& y)
 {
     // YOUR CODE HERE
+/*
+    m_goal_state = get_state_id(x, y);
+
+    if (is_valid_state(m_goal_state)) {
+      return m_goal_state;  // valid state
+    } else {
+      return -1;  // invalid state
+    }
+*/
     return -1;
 }
 
@@ -54,6 +73,14 @@ void Graph::get_succs(
     assert(source_state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
+/*  // HOW DO I GET THE SUCCESSORS?
+    std::vector<int>::iterator iter;
+    for (iter = (*succ_ids).begin(); iter != (*succ_ids).end(); iter++) {
+      if (is_valid_state(*iter)) {  // successor is valid
+        
+      }
+    }
+*/
 }
 
 void Graph::get_path_coordinates(
@@ -61,6 +88,15 @@ void Graph::get_path_coordinates(
     std::vector<std::pair<int, int> > *path_coordinates) const
 {
     // YOUR CODE HERE
+/*
+    std::vector<int>::iterator iter;
+    for (iter = path_state_ids.begin(); iter != path_state_ids.end(); iter++) {
+      int x, y;
+      if (get_coord_from_state_id(*iter, &x, &y) {  //IS *iter CORRECT HERE?
+        (*path_coordinates).push_back(x, y);  //  coordinates are valid
+      }
+    }
+*/
 }
 
 int Graph::get_state_id(const int& x, const int& y) const
@@ -69,6 +105,9 @@ int Graph::get_state_id(const int& x, const int& y) const
     assert(y < m_height);
 
     // YOUR CODE HERE
+/*
+    
+*/
     return 0;
 }
 
@@ -77,12 +116,18 @@ bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
     assert(state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
+/*
+
+*/
     return true;
 }
 
 bool Graph::is_valid_state(const int& x, const int& y) const
 {
     // YOUR CODE HERE
+/*
+
+*/
     return true;
 }
 
@@ -93,6 +138,10 @@ double Graph::get_action_cost(
         const int& succ_y) const
 {
     // YOUR CODE HERE
+/*
+    // Are we calculating distance b/w the 2 points?
+    return sqrt(pow(succ_x - source_x, 2) + pow(succ_y - source_y, 2));
+*/
     return 0;
 }
 
