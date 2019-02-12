@@ -74,6 +74,8 @@ void Dijkstras::extract_path(
 
 //I think I have to get the path backwards (i.e. from goal to start)
 
+// Can end if we have expanded the goal or we have nothing in our priority list.
+/
     if (goal_id == start_id) {
       return;
     }
@@ -89,7 +91,7 @@ void Dijkstras::extract_path(
     // what is the child_to parent_map doing exactly?
     ChildToParentMap::iterator iter = child_to_parent_map.find(goal_id);
 
-    while (1) {
+    while (1) {  // we can put end condition here!!!!!
       if (iter != child_to_parent_map.end()) {
         // Should I remove the mapping?
         std::string value = iter->second;
