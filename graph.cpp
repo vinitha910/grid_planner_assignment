@@ -140,7 +140,7 @@ double Graph::get_action_cost(
 {
     // YOUR CODE HERE
 
-    // Are we calculating distance b/w the 2 points?
+    // Calculate Euclidean distance between the 2 points
     return sqrt(pow(succ_x - source_x, 2) + pow(succ_y - source_y, 2));
  //   return 0;
 }

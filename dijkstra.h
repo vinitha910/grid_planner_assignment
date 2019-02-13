@@ -54,12 +54,13 @@ class CostMapComparator {
         // Given two states you need to write a comparator that determines
         // how to order them
         // YOUR CODE HERE (replace line below)
-        
+       
+        // return does state 1 have lower cost than state 2? 
 /*      // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
         // What is the logic for this?
         double state_1_cost = Graph::get_action_cost(
         double state_2_cost = 
-        return state_1_cost > state_2_cost; 
+        return state_1_cost <=  state_2_cost; 
 */
         return true;
     }

@@ -74,8 +74,10 @@ void Dijkstras::extract_path(
 
 //I think I have to get the path backwards (i.e. from goal to start)
 
-// Can end if we have expanded the goal or we have nothing in our priority list.
-/
+// Can stop if we have expanded the goal or we have nothing in our priority list.
+
+//do find and check if value is end before loop!
+
     if (goal_id == start_id) {
       return;
     }
