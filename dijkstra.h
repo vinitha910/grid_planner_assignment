@@ -53,15 +53,25 @@ class CostMapComparator {
                     const int& state_2) const {
         // Given two states you need to write a comparator that determines
         // how to order them
+  
         // YOUR CODE HERE (replace line below)
        
         // return does state 1 have lower cost than state 2? 
-/*      // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
-        // What is the logic for this?
-        double state_1_cost = Graph::get_action_cost(
-        double state_2_cost = 
-        return state_1_cost <=  state_2_cost; 
-*/
+        // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
+        
+	int source_x, source_y, succ_x, succ_y;
+	Graph::get_coord_from_state_id(start_id, &source_x, &source_y);
+
+        Graph::get_coord_from_state_id(state_1, &succ_x, &succ_y);	
+        double state_1_cost = Graph::get_action_cost(source_x, source_y, succ_x, succ_y);
+	
+	Graph::get_coord_from_state_id(state_2, &succ_x, &succ_y);
+        double state_2_cost = Graph::get_action_cost(source_x, source_y, succ_x, succ_y);
+        
+	return state_1_cost <=  state_2_cost;
+
+        // END OF MY CODE
+
         return true;
     }
 
