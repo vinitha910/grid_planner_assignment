@@ -56,7 +56,10 @@ void Dijkstras::run_planner(
         (*num_expansions)++;
 
         // YOUR CODE HERE
+      
+// we can stop if we have expanded the goal or we have nothing in our priority queue
         
+
         // MY CODE ENDS
     }
 }
@@ -81,7 +84,7 @@ void Dijkstras::extract_path(
       return;
     }
 
-    if (get coord_from_state_id(goal_id, &x, &y) {
+    if (get coord_from_state_id(goal_id, &x, &y)) {
       // check if x and y represent valid state
       // push goal_id
       (*path_state_ids).push_back(goal_id);
