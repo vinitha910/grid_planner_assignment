@@ -76,14 +76,14 @@ void Graph::get_succs(
     assert(source_state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
-
+/*
     std::vector<int>::iterator iter;
     for (iter = (*succ_ids).begin(); iter != (*succ_ids).end(); iter++) {
       if (is_valid_state(*iter)) {  // successor is valid
         
       }
     }
-
+*/
     int x_source, y_source;
     get_coord_from_state_id(source_state_id, x_source, y_source);
     int x_succ, y_succ;

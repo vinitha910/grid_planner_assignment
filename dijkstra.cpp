@@ -49,17 +49,40 @@ void Dijkstras::run_planner(
 // MY CODE BEGINS
     std::set<int, CostMapComparator> Q;
 // MY CODE ENDS
-
+/*
     // While the queue is not empty
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
         // YOUR CODE HERE
-      
+        check if node popped is goal
+	 call extract_path
+	 break
+
+        popped node which has optimal cost
+
+        call get successors function
+
+	//close list has nodes with optimal cost
+	// open list has everything that in in priority queue, and nodes that haven't been seen yet
+	
+	// check if sucessor node is in the priority queue
+	// if its not in the priority queue, we need to add it
+	//     find cost from parent to successor by calling get_action _cost
+	//     and add this to parent's cost to get g value
+	//
+	// else
+	//    find cost here too
+	//    
+	//    update cost to optimal cost in priority queue
+	//    
+	//
+	//at end of while loop, call extract path
+	
 // we can stop if we have expanded the goal or we have nothing in our priority queue
         
-
+*/
         // MY CODE ENDS
     }
 }
