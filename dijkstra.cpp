@@ -47,20 +47,71 @@ void Dijkstras::run_planner(
 //    std::set<int> Q; // You will need to change this line
 
 // MY CODE BEGINS
+    // set of state IDs ordered by cost (rather then sorted in order of integers)
     std::set<int, CostMapComparator> Q;
+
+    std::vector<int> path_state_ids; //close list?
 // MY CODE ENDS
-/*
+
     // While the queue is not empty
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
         // YOUR CODE HERE
+	const auto iterator node = Q.begin();
+
+	if (*node == goal_id) {
+          extract_path(ChildToParentMap, start_id, goal_id, &path_state_ids);
+	  // set path parameter?
+	  break;
+	}
+
+        std::vector<int> succ_ids;
+        std::vector<double> costs;
+        get_succ(start_id, &succ_ids, &costs);
+        auto iterStateID = succ_ids.begin();
+	auto iterCosts = costs.begin();
+	while (iterStateID != succ_ids.end() && iterCosts != succ_ids.end()) {
+          // find cost
+	  int x_parent, y_parent, x_succ, y_succ;
+	  get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
+          get_coord_from_state_id(*iterStateID, &x_succ, &y_succ); //gets succ coordinates
+          double gValue = get_action_cost(x_parent, y_parent, x_succ, y_succ); //finds cost from parent to successor
+          gValue += cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
+
+          // if node is not in the priority queue, we need to add it!
+	  if (Q.find(node) == Q.end()) {
+            Q.insert(node);
+	  } else {
+            // node is in priority queue, but update it to have optimal cost
+	    // For Dikstras, optimal cost is the least cost
+	    if (gValue < cost_map_[node]) { //if (CostMapComparator(*iterStateID, *node)) {
+              // update cost map?
+	      cost_map_[node] = gValue;
+	    }
+	  }
+	}
+      }
+
+      // if Q is empty, we need to call extract_path too
+      if (Q.empty()) {
+        extract_path(ChildToParentMap, start_id, goal_id, &path_state_ids);
+      }
+
+      // set path parameter
+      for (auto iter = path_state_ids.begin(); iter != path_state_ids.end(); ++iter) {
+        int x, y;
+	get_coord_from_state_id(*iter, &x, &y);
+        path.pushback(std::make_pair(x, y));
+      }
+
+/*
         check if node popped is goal
 	 call extract_path
 	 break
 
-        popped node which has optimal cost
+        //popped node has optimal cost
 
         call get successors function
 
@@ -81,10 +132,10 @@ void Dijkstras::run_planner(
 	//at end of while loop, call extract path
 	
 // we can stop if we have expanded the goal or we have nothing in our priority queue
-        
-*/
+  */      
+
         // MY CODE ENDS
-    }
+
 }
 
 void Dijkstras::extract_path(
