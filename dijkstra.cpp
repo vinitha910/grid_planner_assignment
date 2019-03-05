@@ -45,14 +45,14 @@ void Dijkstras::run_planner(
     // comparator defined in dijkstra.h as your priority queue
    
 //    std::set<int> Q; // You will need to change this line
-/*
+
 // MY CODE BEGINS
     // set of state IDs ordered by cost (rather then sorted in order of integers)
     std::set<int, CostMapComparator> Q;
 
     std::vector<int> path_state_ids; //close list?
 // MY CODE ENDS
-*/
+
     // While the queue is not empty
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
@@ -144,7 +144,7 @@ void Dijkstras::extract_path(
     const int& goal_id,
     std::vector<int> *path_state_ids)
 {
-  /*  // YOUR CODE HERE
+// YOUR CODE HERE
 
     int x, y;
 
@@ -175,7 +175,7 @@ void Dijkstras::extract_path(
       (*path_state_ids).push_back(iter->second);
       iter = child_to_parent_map.find(iter->second);
     }
-*/
+
 /* OLD CODE
     while (1) {  // we can put end condition here!!!!!
       if (iter != child_to_parent_map.end()) {
