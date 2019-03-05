@@ -40,7 +40,7 @@ int Graph::set_start_state(const int& x, const int& y)
 
     m_start_id = get_state_id(x, y);
     
-    if (is_valid_state(m_start_id)) {
+    if (is_valid_state(x, y)) {
       return m_start_id;  // valid state
     } else {
       return -1;  // invalid state
@@ -55,10 +55,10 @@ int Graph::set_goal_state(const int& x, const int& y)
 {
     // YOUR CODE HERE
 
-    m_goal_state = get_state_id(x, y);
+    m_goal_id = get_state_id(x, y);
 
-    if (is_valid_state(m_goal_state)) {
-      return m_goal_state;  // valid state
+    if (is_valid_state(x, y)) {
+      return m_goal_id;  // valid state
     } else {
       return -1;  // invalid state
     }
