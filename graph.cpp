@@ -85,7 +85,7 @@ void Graph::get_succs(
     }
 */
     int x_source, y_source;
-    get_coord_from_state_id(source_state_id, x_source, y_source);
+    get_coord_from_state_id(source_state_id, &x_source, &y_source);
     int x_succ, y_succ;
     int succ_state_id;
     double succ_cost;
@@ -100,7 +100,7 @@ void Graph::get_succs(
 	y_succ = y_source + i;
         succ_state_id = get_state_id(x_succ, y_succ);
 
-	if (!is_valid_state(suc_state_id)) {
+	if (!is_valid_state(x_succ, y_succ)) {
           continue;  // successor is not valid
 	} else {
 	  (*succ_ids).pushback(succ_state_id);
