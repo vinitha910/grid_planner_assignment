@@ -122,7 +122,7 @@ void Graph::get_path_coordinates(
     for (auto iter = path_state_ids.begin(); iter != path_state_ids.end(); iter++) {
       int x, y;
       if (get_coord_from_state_id(*iter, &x, &y)) {
-        (*path_coordinates).push_back(x, y);  //  coordinates are valid
+        (*path_coordinates).push_back(std::make_pair(x, y));  //  coordinates are valid
       }
     }
 
@@ -165,10 +165,10 @@ bool Graph::is_valid_state(const int& x, const int& y) const
     // YOUR CODE HERE
     
     // check bounds (i.e. value is valid)
-    if (!(*x >= 0 && *x < m_width && *y >= 0 && *y < m_height)) {
+    if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
       return false;
     } else { // check occupancy grid to see if cell is free
-       if (occupancy_grid[get_state_id(x, y)] == 0) {
+       if (m_occupancy_grid[get_state_id(x, y)] == 0) {
          return true;
        } else {
          return false;
