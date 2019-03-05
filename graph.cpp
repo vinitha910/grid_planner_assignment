@@ -103,9 +103,9 @@ void Graph::get_succs(
 	if (!is_valid_state(x_succ, y_succ)) {
           continue;  // successor is not valid
 	} else {
-	  (*succ_ids).pushback(succ_state_id);
-          succ_cost = get_action_cost(x_source, y_source);
-	  (*costs).pushback(succ_cost);
+	  (*succ_ids).push_back(succ_state_id);
+          succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+	  (*costs).push_back(succ_cost);
 	}
       }
     }
@@ -119,8 +119,7 @@ void Graph::get_path_coordinates(
 {
     // YOUR CODE HERE
 
-    std::vector<int>::iterator iter;
-    for (iter = path_state_ids.begin(); iter != path_state_ids.end(); iter++) {
+    for (auto iter = path_state_ids.begin(); iter != path_state_ids.end(); iter++) {
       int x, y;
       if (get_coord_from_state_id(*iter, &x, &y) {
         (*path_coordinates).push_back(x, y);  //  coordinates are valid
