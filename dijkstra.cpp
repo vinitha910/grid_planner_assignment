@@ -198,7 +198,5 @@ void Dijkstras::extract_path(
     }
 */
     // END OF MY CODE
-}
-
-}
+  }
 }
