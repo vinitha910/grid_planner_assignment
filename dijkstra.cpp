@@ -57,7 +57,7 @@ void Dijkstras::run_planner(
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
-/*
+
         // YOUR CODE HERE
 	const auto iterator node = Q.begin();
 
@@ -105,7 +105,7 @@ void Dijkstras::run_planner(
 	get_coord_from_state_id(*iter, &x, &y);
         path.pushback(std::make_pair(x, y));
       }
-*/
+
 /*
         check if node popped is goal
 	 call extract_path
@@ -199,4 +199,7 @@ void Dijkstras::extract_path(
 */
     // END OF MY CODE
   }
+}
+
+}
 }
