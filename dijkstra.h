@@ -58,12 +58,14 @@ class CostMapComparator {
        
         // return does state 1 have lower cost than state 2? 
         // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
-        
-	return cost_map_.find(state_1) <=  cost_map_(state_2);
+	const auto state_1Iter = cost_map_.find(state_1);
+	const auto state_2Iter = cost_map_.find(state_2);        
+ 
+	return state_1Iter->second <= state_2Iter->second;
 
         // END OF MY CODE
 
-        return true;
+        // return true;
     }
 
  private:
