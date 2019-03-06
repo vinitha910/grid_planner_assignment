@@ -59,6 +59,7 @@ void Dijkstras::run_planner(
 
     // While the queue is not empty
     while (!Q.empty()) {
+        getchar();
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
