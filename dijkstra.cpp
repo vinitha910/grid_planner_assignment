@@ -83,8 +83,8 @@ void Dijkstras::run_planner(
           gValue += cost_map[*node]; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
 
           // if node is not in the priority queue, we need to add it!
-	  if (Q.find(node) == Q.end()) {
-            Q.insert(node);
+	  if (Q.find(*node) == Q.end()) {
+            Q.insert(*node);
 	  } else {
             // node is in priority queue, but update it to have optimal cost
 	    // For Dikstras, optimal cost is the least cost
