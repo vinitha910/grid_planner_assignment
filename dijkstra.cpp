@@ -161,7 +161,7 @@ void Dijkstras::extract_path(
     //ChildToParentMap is typedef for std::unordered_map<int, int>!
     //maps child state id to parent state id
     // what is the child_to parent_map doing exactly?
-    ChildToParentMap::iterator iter = child_to_parent_map.find(goal_id);
+    auto iter = child_to_parent_map.find(goal_id);
     (*path_state_ids).push_back(goal_id);
 
     // loop till we find start or we reach end of map
