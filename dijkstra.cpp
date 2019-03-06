@@ -71,7 +71,7 @@ void Dijkstras::run_planner(
 
         std::vector<int> succ_ids;
         std::vector<double> costs;
-        m_graph.get_succ(start_id, &succ_ids, &costs);
+        m_graph.get_succs(start_id, &succ_ids, &costs);
         auto iterStateID = succ_ids.begin();
 	auto iterCosts = costs.begin();
 	while (iterStateID != succ_ids.end() && iterCosts != succ_ids.end()) {
