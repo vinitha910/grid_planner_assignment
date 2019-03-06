@@ -77,11 +77,11 @@ void Dijkstras::run_planner(
 	while (iterStateID != succ_ids.end() && iterCosts != costs.end()) {
           // find cost
 	  int x_parent, y_parent, x_succ, y_succ;
-	  get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
-          get_coord_from_state_id(*iterStateID, &x_succ, &y_succ); //gets succ coordinates
+	  m_graph.get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
+          m_graph.get_coord_from_state_id(*iterStateID, &x_succ, &y_succ); //gets succ coordinates
           child_to_parent_map.insert(*iterStateID, *node);
 
-          double gValue = get_action_cost(x_parent, y_parent, x_succ, y_succ); //finds cost from parent to successor
+          double gValue = m_graph.get_action_cost(x_parent, y_parent, x_succ, y_succ); //finds cost from parent to successor
           gValue += cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
 
           // if node is not in the priority queue, we need to add it!
