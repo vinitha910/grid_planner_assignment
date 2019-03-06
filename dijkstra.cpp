@@ -78,7 +78,7 @@ void Dijkstras::run_planner(
           child_to_parent_map.insert(*iterStateID, *node);
 
           double gValue = *iterCosts; //finds cost from parent to successor
-          gValue += cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
+          gValue += node->second; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
 
           // if node is not in the priority queue, we need to add it!
 	  if (Q.find(node) == Q.end()) {
@@ -86,9 +86,9 @@ void Dijkstras::run_planner(
 	  } else {
             // node is in priority queue, but update it to have optimal cost
 	    // For Dikstras, optimal cost is the least cost
-	    if (gValue < cost_map_[node]) { //if (CostMapComparator(*iterStateID, *node)) {
+	    if (gValue < node->second) { //cost_map_[node]) { //if (CostMapComparator(*iterStateID, *node)) {
               // update cost map?
-	      cost_map_[node] = gValue;
+	      node->second = gValue; // cost_map_[node] = gValue;
 	    }
 	  }
 	}
