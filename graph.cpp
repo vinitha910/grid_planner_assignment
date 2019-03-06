@@ -104,6 +104,7 @@ void Graph::get_succs(
           continue;  // successor is not valid
 	} else {
 	  (*succ_ids).push_back(succ_state_id);
+          // transition cost i.e. cost from parent to successor
           succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
 	  (*costs).push_back(succ_cost);
 	}

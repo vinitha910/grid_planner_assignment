@@ -48,7 +48,9 @@ void Dijkstras::run_planner(
 
 // MY CODE BEGINS
     // set of state IDs ordered by cost (rather then sorted in order of integers)
-    std::set<int, CostMapComparator> Q;
+    CostMap cost_map;
+    CostMapComparator cost_map_comparator(cost_map);
+    std::set<int, CostMapComparator> Q(cost_map_comparator);
 
     std::vector<int> path_state_ids; //close list?
 
@@ -78,7 +80,7 @@ void Dijkstras::run_planner(
           child_to_parent_map.insert(*iterStateID, *node);
 
           double gValue = *iterCosts; //finds cost from parent to successor
-          gValue += node->second; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
+          gValue += cost_map[*node]; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
 
           // if node is not in the priority queue, we need to add it!
 	  if (Q.find(node) == Q.end()) {
@@ -86,9 +88,9 @@ void Dijkstras::run_planner(
 	  } else {
             // node is in priority queue, but update it to have optimal cost
 	    // For Dikstras, optimal cost is the least cost
-	    if (gValue < node->second) { //cost_map_[node]) { //if (CostMapComparator(*iterStateID, *node)) {
+	    if (gValue < cost_map[*node]) { //cost_map_[node]) { //if (CostMapComparator(*iterStateID, *node)) {
               // update cost map?
-	      node->second = gValue; // cost_map_[node] = gValue;
+	      cost_map[*node] = gValue; // cost_map_[node] = gValue;
 	    }
 	  }
 	}
