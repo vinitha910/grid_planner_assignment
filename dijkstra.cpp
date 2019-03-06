@@ -75,10 +75,6 @@ void Dijkstras::run_planner(
         auto iterStateID = succ_ids.begin();
 	auto iterCosts = costs.begin();
 	while (iterStateID != succ_ids.end() && iterCosts != costs.end()) {
-          // find cost
-	  int x_parent, y_parent, x_succ, y_succ;
-	  m_graph.get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
-          m_graph.get_coord_from_state_id(*iterStateID, &x_succ, &y_succ); //gets succ coordinates
           child_to_parent_map.insert(*iterStateID, *node);
 
           double gValue = *iterCosts; //finds cost from parent to successor
