@@ -102,7 +102,7 @@ void Dijkstras::run_planner(
       }
 
       // set path parameter
-      m_graph.get_path_coordinates(path_state_ids, &path);
+      m_graph.get_path_coordinates(path_state_ids, path);
 
 /*
         check if node popped is goal
