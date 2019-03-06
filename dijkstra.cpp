@@ -74,7 +74,7 @@ void Dijkstras::run_planner(
         m_graph.get_succs(start_id, &succ_ids, &costs);
         auto iterStateID = succ_ids.begin();
 	auto iterCosts = costs.begin();
-	while (iterStateID != succ_ids.end() && iterCosts != succ_ids.end()) {
+	while (iterStateID != succ_ids.end() && iterCosts != costs.end()) {
           // find cost
 	  int x_parent, y_parent, x_succ, y_succ;
 	  get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
