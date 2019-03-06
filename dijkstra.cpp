@@ -51,6 +51,8 @@ void Dijkstras::run_planner(
     std::set<int, CostMapComparator> Q;
 
     std::vector<int> path_state_ids; //close list?
+
+    ChildToParentMap child_to_parent_map; // empty map
 // MY CODE ENDS
 
     // While the queue is not empty
@@ -59,10 +61,10 @@ void Dijkstras::run_planner(
         (*num_expansions)++;
 
         // YOUR CODE HERE
-	const auto iterator node = Q.begin();
+	const auto node = Q.begin(); 
 
 	if (*node == goal_id) {
-          extract_path(ChildToParentMap, start_id, goal_id, &path_state_ids);
+          extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
 	  // set path parameter?
 	  break;
 	}
@@ -77,6 +79,8 @@ void Dijkstras::run_planner(
 	  int x_parent, y_parent, x_succ, y_succ;
 	  get_coord_from_state_id(*node, &x_parent, &y_parent); //gets parents coordinates
           get_coord_from_state_id(*iterStateID, &x_succ, &y_succ); //gets succ coordinates
+          child_to_parent_map.insert(*iterStateID, *node);
+
           double gValue = get_action_cost(x_parent, y_parent, x_succ, y_succ); //finds cost from parent to successor
           gValue += cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
 
@@ -96,7 +100,7 @@ void Dijkstras::run_planner(
 
       // if Q is empty, we need to call extract_path too
       if (Q.empty()) {
-        extract_path(ChildToParentMap, start_id, goal_id, &path_state_ids);
+        extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
       }
 
       // set path parameter
