@@ -102,11 +102,7 @@ void Dijkstras::run_planner(
       }
 
       // set path parameter
-      for (auto iter = path_state_ids.begin(); iter != path_state_ids.end(); ++iter) {
-        int x, y;
-	get_coord_from_state_id(*iter, &x, &y);
-        path.pushback(std::make_pair(x, y));
-      }
+      m_graph.get_path_coordinates(path_state_ids, &path);
 
 /*
         check if node popped is goal
@@ -160,11 +156,7 @@ void Dijkstras::extract_path(
       return;
     }
 
-    if (get coord_from_state_id(goal_id, &x, &y)) {
-      // check if x and y represent valid state
-      // push goal_id
-      (*path_state_ids).push_back(goal_id);
-    }
+    (*path_state_ids).push_back(goal_id);
 
     //ChildToParentMap is typedef for std::unordered_map<int, int>!
     //maps child state id to parent state id
