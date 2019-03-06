@@ -77,7 +77,7 @@ void Dijkstras::run_planner(
         auto iterStateID = succ_ids.begin();
 	auto iterCosts = costs.begin();
 	while (iterStateID != succ_ids.end() && iterCosts != costs.end()) {
-          child_to_parent_map.insert(*iterStateID, *node);
+          child_to_parent_map[*iterStateID] = *node;
 
           double gValue = *iterCosts; //finds cost from parent to successor
           gValue += cost_map[*node]; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
