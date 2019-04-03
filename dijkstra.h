@@ -27,14 +27,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DIJKSTRAS_H_
-#define DIJKSTRAS_H_
+#ifndef DIJKSTRA_H_
+#define DIJKSTRA_H_
 
-#include "graph.h"
 #include <vector>
 #include <utility>
 #include <unordered_map>
 #include <iostream>
+#include "graph.h"
 
 namespace grid_planner {
 namespace planners {
@@ -54,14 +54,14 @@ class CostMapComparator {
                     const int& state_2) const {
         // Given two states you need to write a comparator that determines
         // how to order them
-  
+
         // YOUR CODE HERE (replace line below)
-       
-        // return does state 1 have lower cost than state 2? 
+
+        // return does state 1 have lower cost than state 2?
         // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
-	const auto state_1Iter = cost_map_.find(state_1);
-	const auto state_2Iter = cost_map_.find(state_2);        
- 
+    const auto state_1Iter = cost_map_.find(state_1);
+    const auto state_2Iter = cost_map_.find(state_2);
+
     if (state_1Iter == cost_map_.end()) {
         std::cout << state_1 << " -> FUCK 1" << std::endl;
     }
@@ -70,7 +70,7 @@ class CostMapComparator {
         std::cout << state_2 << " -> FUCK 2" << std::endl;
     }
 
-	return state_1Iter->second <= state_2Iter->second;
+    return state_1Iter->second <= state_2Iter->second;
 
         // END OF MY CODE
 
@@ -84,11 +84,10 @@ class CostMapComparator {
 // This class implements dijkstra's algorithm
 class Dijkstras {
  public:
-
     Dijkstras(
         const graphs::Graph& graph) : m_graph(graph) {}
 
-    ~Dijkstras() {};
+    ~Dijkstras() {}
 
     // Runs the planner from the start ID to the goal ID and fills in the
     // final path states into the path vector
@@ -107,10 +106,9 @@ class Dijkstras {
         std::vector<int> *path_state_ids);
 
     const graphs::Graph m_graph;
-
 };
 
-}
-}
+}  // namespace planners
+}  // namespace grid_planner
 
-#endif
+#endif  // DIJKSTRA_H_

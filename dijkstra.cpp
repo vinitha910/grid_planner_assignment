@@ -39,12 +39,11 @@ void Dijkstras::run_planner(
     const int& start_id,
     const int& goal_id,
     int* num_expansions,
-    std::vector<std::pair<int, int>> *path)
-{
-    //std::cout << "in run planner" << std::endl;
+    std::vector<std::pair<int, int>> *path) {
+    // std::cout << "in run planner" << std::endl;
     // Create priority queue; I suggest using a set with the custom
     // comparator defined in dijkstra.h as your priority queue
-   
+
 //    std::set<int> Q; // You will need to change this line
 
 // MY CODE BEGINS
@@ -52,49 +51,49 @@ void Dijkstras::run_planner(
     CostMap cost_map;
     CostMapComparator cost_map_comparator(cost_map);
     std::set<int, CostMapComparator> Q(cost_map_comparator);
-    
+
     cost_map[start_id] = 0;
-    //std::cout << start_id << " = " << cost_map[start_id] << std::endl;
+    // std::cout << start_id << " = " << cost_map[start_id] << std::endl;
     Q.insert(start_id);
     // cost_map[start_id] = 0;
 
-    std::vector<int> path_state_ids; //close list?
+    std::vector<int> path_state_ids;  // close list?
 
-    ChildToParentMap child_to_parent_map; // empty map
+    ChildToParentMap child_to_parent_map;  // empty map
 // MY CODE ENDS
 
     // While the queue is not empty
     while (!Q.empty()) {
-        //std::cout << "getchar" << std::endl;
-        //getchar();  // debugging technique that works on Vinitha's laptop!
+        // std::cout << "getchar" << std::endl;
+        // getchar();  // debugging technique that works on Vinitha's laptop!
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
         // YOUR CODE HERE
-	    const int parent = *(Q.begin()); 
+        const int parent = *(Q.begin());
         Q.erase(Q.begin());
 
-	    if (parent == goal_id) {
+        if (parent == goal_id) {
             extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
-	        // set path parameter?
+            // set path parameter?
             m_graph.get_path_coordinates(path_state_ids, path);
             return;
-	    }
+        }
 
         std::vector<int> succ_ids;
         std::vector<double> costs;
         m_graph.get_succs(parent, &succ_ids, &costs);
         auto iterStateID = succ_ids.begin();
-	    auto iterCosts = costs.begin();
-	    
+        auto iterCosts = costs.begin();
+
         while (iterStateID != succ_ids.end() && iterCosts != costs.end()) {
-            //std::cout << "Succs in Planner function" << std::endl;
-            //std::cout << *iterStateID << " = " << *iterCosts << std::endl;
+            // std::cout << "Succs in Planner function" << std::endl;
+            // std::cout << *iterStateID << " = " << *iterCosts << std::endl;
             // child_to_parent_map[*iterStateID] = parent;
 
-            double gValue = cost_map[parent] + *iterCosts; //finds cost from parent to successor
+            double gValue = cost_map[parent] + *iterCosts;  // finds cost from parent to successor
             // gValue += cost_map[*node]; //cost_map_[*node]; // adds above to parent's cost (i.e. from parent to start_id) to get g value
-            
+
             // if node is not in the priority queue, we need to add it
             // check cost map instead of doing Q.find (which does binary search on the set so it uses the comparator, which leads to undefined behavior when the cost hasn't been defined for a stateID
             if (cost_map.find(*iterStateID) == cost_map.end()) {
@@ -103,14 +102,14 @@ void Dijkstras::run_planner(
                 child_to_parent_map[*iterStateID] = parent;
             } else if (gValue < cost_map[*iterStateID]) {
                 cost_map[*iterStateID] = gValue;
-                //std::cout << *iterStateID << " = " << cost_map[*iterStateID] << std::endl;
-                Q.erase(*iterStateID); // do this because we can't insert a duplicate value! we need to erase the stateID and then insert it again with the new cost; the comparator will only be called when we do find() or insert()
+                // std::cout << *iterStateID << " = " << cost_map[*iterStateID] << std::endl;
+                Q.erase(*iterStateID);  // do this because we can't insert a duplicate value! we need to erase the stateID and then insert it again with the new cost; the comparator will only be called when we do find() or insert()
                 Q.insert(*iterStateID);
                 child_to_parent_map[*iterStateID] = parent;
-                //std::cout << "==========================" << std::endl;
-                // cost_map[*iterStateID] = gValue; 
+                // std::cout << "==========================" << std::endl;
+                // cost_map[*iterStateID] = gValue;
             }
-            
+
             /*
             if (Q.find(*iterStateID) == Q.end()) {
                 std::cout << "node not in priority queue" << std::endl;
@@ -132,7 +131,7 @@ void Dijkstras::run_planner(
             */
             ++iterStateID;
             ++iterCosts;
-	    }
+        }
     }
 
       // if Q is empty, we need to call extract_path too
@@ -172,23 +171,21 @@ void Dijkstras::run_planner(
   */      
 
         // MY CODE ENDS
-
 }
 
 void Dijkstras::extract_path(
     const ChildToParentMap& child_to_parent_map,
     const int& start_id,
     const int& goal_id,
-    std::vector<int> *path_state_ids)
-{
+    std::vector<int> *path_state_ids) {
 // YOUR CODE HERE
 
     int x, y;
 
-//I think I have to get the path backwards (i.e. from goal to start)
+// I think I have to get the path backwards (i.e. from goal to start)
 // Can stop if we have expanded the goal or we have nothing in our priority list.
 
-//do find and check if value is end before loop!
+// do find and check if value is end before loop!
 
     if (goal_id == start_id) {
       return;
@@ -199,23 +196,22 @@ void Dijkstras::extract_path(
 
     (*path_state_ids).push_back(goal_id);
 
-    //ChildToParentMap is typedef for std::unordered_map<int, int>!
-    //maps child state id to parent state id
+    // ChildToParentMap is typedef for std::unordered_map<int, int>!
+    // maps child state id to parent state id
     // what is the child_to parent_map doing exactly?
     auto iter = child_to_parent_map.find(goal_id);
 
     // loop till we find start or we reach end of map
     while (iter != child_to_parent_map.end()) {
-
-      //getchar();
-      //std::cout << iter->second << std::endl;
+      // getchar();
+      // std::cout << iter->second << std::endl;
       (*path_state_ids).push_back(iter->second);
       iter = child_to_parent_map.find(iter->second);
     }
 
-    //(*path_state_ids).push_back(start_id);
+    // (*path_state_ids).push_back(start_id);
 
-    
+
 /* OLD CODE
     while (1) {  // we can put end condition here!!!!!
       if (iter != child_to_parent_map.end()) {
@@ -241,7 +237,6 @@ void Dijkstras::extract_path(
 
     // END OF MY CODE
   }
-}
+}  // namespace planners
 
-}
-
+}  // namespace grid_planner

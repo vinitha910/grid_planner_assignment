@@ -35,12 +35,11 @@
 namespace grid_planner {
 namespace graphs {
 
-int Graph::set_start_state(const int& x, const int& y)
-{
+int Graph::set_start_state(const int& x, const int& y) {
     // YOUR CODE HERE
 
     m_start_id = get_state_id(x, y);
-    
+
     if (is_valid_state(x, y)) {
       return m_start_id;  // valid state
     } else {
@@ -52,8 +51,7 @@ int Graph::set_start_state(const int& x, const int& y)
 //    return -1;
 }
 
-int Graph::set_goal_state(const int& x, const int& y)
-{
+int Graph::set_goal_state(const int& x, const int& y) {
     // YOUR CODE HERE
 
     m_goal_id = get_state_id(x, y);
@@ -72,8 +70,8 @@ int Graph::set_goal_state(const int& x, const int& y)
 void Graph::get_succs(
     const int& source_state_id,
     std::vector<int> *succ_ids,
-    std::vector<double> *costs) const
-{
+    std::vector<double> *costs) const {
+
     assert(source_state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
@@ -93,23 +91,23 @@ void Graph::get_succs(
 
     for (int i = -1; i <= 1; i++) {
       for (int j = -1; j <= 1; j++) {
-        if (i == 0 && j == 0) { // current state, not a successor
+        if (i == 0 && j == 0) {  // current state, not a successor
           continue;
-	}
-        
-	x_succ = x_source + i;
-	y_succ = y_source + j;
+    }
+
+    x_succ = x_source + i;
+    y_succ = y_source + j;
     // succ_state_id = get_state_id(x_succ, y_succ);
 
-	if (!is_valid_state(x_succ, y_succ)) {
+    if (!is_valid_state(x_succ, y_succ)) {
           continue;  // successor is not valid
-	} else {
-	   succ_state_id = get_state_id(x_succ, y_succ);
+    } else {
+        succ_state_id = get_state_id(x_succ, y_succ);
         (*succ_ids).push_back(succ_state_id);
-          // transition cost i.e. cost from parent to successor
-          succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
-	  (*costs).push_back(succ_cost);
-	
+        // transition cost i.e. cost from parent to successor
+        succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+        (*costs).push_back(succ_cost);
+
        // std::cout << succ_state_id << " = " << succ_cost << std::endl;
     }
       }
@@ -120,8 +118,7 @@ void Graph::get_succs(
 
 void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
-    std::vector<std::pair<int, int> > *path_coordinates) const
-{
+    std::vector<std::pair<int, int> > *path_coordinates) const {
     // YOUR CODE HERE
 
     for (auto iter = path_state_ids.begin(); iter != path_state_ids.end(); iter++) {
@@ -132,47 +129,43 @@ void Graph::get_path_coordinates(
     }
 
     // END OF MY CODE
-
 }
 
-int Graph::get_state_id(const int& x, const int& y) const
-{
+int Graph::get_state_id(const int& x, const int& y) const {
     assert(x < m_width);
     assert(y < m_height);
 
     // YOUR CODE HERE
 
-    return x + y * m_width; 
+    return x + y * m_width;
 
     // END OF MY CODE
 
     // return 0;
 }
 
-bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
-{
+bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const {
     assert(state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
-    
+
     *y = state_id / m_width;
     *x = state_id - *y * m_width;
 
     return is_valid_state(*x, *y);
 
     // END OF MY CODE
-    
+
     return true;
 }
 
-bool Graph::is_valid_state(const int& x, const int& y) const
-{
+bool Graph::is_valid_state(const int& x, const int& y) const {
     // YOUR CODE HERE
-    
+
     // check bounds (i.e. value is valid)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
       return false;
-    } else { // check occupancy grid to see if cell is free
+    } else {  // check occupancy grid to see if cell is free
        if (m_occupancy_grid[get_state_id(x, y)] == 0) {
          return true;
        } else {
@@ -181,7 +174,7 @@ bool Graph::is_valid_state(const int& x, const int& y) const
     }
 
     // END OF MY CODE
-   
+
     return true;
 }
 
@@ -189,15 +182,14 @@ double Graph::get_action_cost(
         const int& source_x,
         const int& source_y,
         const int& succ_x,
-        const int& succ_y) const
-{
+        const int& succ_y) const {
     // YOUR CODE HERE
 
     // Calculate Euclidean distance between the 2 points
     return sqrt(pow(succ_x - source_x, 2) + pow(succ_y - source_y, 2));
 
     // END OF MY CODE
- //   return 0;
+    //   return 0;
 }
 
 }  // namespace graphs
