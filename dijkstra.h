@@ -34,6 +34,7 @@
 #include <vector>
 #include <utility>
 #include <unordered_map>
+#include <iostream>
 
 namespace grid_planner {
 namespace planners {
@@ -61,6 +62,14 @@ class CostMapComparator {
 	const auto state_1Iter = cost_map_.find(state_1);
 	const auto state_2Iter = cost_map_.find(state_2);        
  
+    if (state_1Iter == cost_map_.end()) {
+        std::cout << state_1 << " -> FUCK 1" << std::endl;
+    }
+
+    if (state_2Iter == cost_map_.end()) {
+        std::cout << state_2 << " -> FUCK 2" << std::endl;
+    }
+
 	return state_1Iter->second <= state_2Iter->second;
 
         // END OF MY CODE

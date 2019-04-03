@@ -30,6 +30,7 @@
 #include "graph.h"
 #include <assert.h>
 #include <cmath>
+#include <iostream>
 
 namespace grid_planner {
 namespace graphs {
@@ -97,17 +98,20 @@ void Graph::get_succs(
 	}
         
 	x_succ = x_source + i;
-	y_succ = y_source + i;
-        succ_state_id = get_state_id(x_succ, y_succ);
+	y_succ = y_source + j;
+    // succ_state_id = get_state_id(x_succ, y_succ);
 
 	if (!is_valid_state(x_succ, y_succ)) {
           continue;  // successor is not valid
 	} else {
-	  (*succ_ids).push_back(succ_state_id);
+	   succ_state_id = get_state_id(x_succ, y_succ);
+        (*succ_ids).push_back(succ_state_id);
           // transition cost i.e. cost from parent to successor
           succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
 	  (*costs).push_back(succ_cost);
-	}
+	
+       // std::cout << succ_state_id << " = " << succ_cost << std::endl;
+    }
       }
     }
 
@@ -142,7 +146,7 @@ int Graph::get_state_id(const int& x, const int& y) const
 
     // END OF MY CODE
 
-    return 0;
+    // return 0;
 }
 
 bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
