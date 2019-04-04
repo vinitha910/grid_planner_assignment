@@ -51,10 +51,10 @@ class CostMapComparator {
 
     bool operator()(const int& state_1,
                     const int& state_2) const {
-        const auto state_1Iter = cost_map_.find(state_1);
-        const auto state_2Iter = cost_map_.find(state_2);
+        const auto state_1_iter = cost_map_.find(state_1);
+        const auto state_2_iter = cost_map_.find(state_2);
 
-        return state_1Iter->second <= state_2Iter->second;
+        return state_1_iter->second <= state_2_iter->second;
     }
 
  private:

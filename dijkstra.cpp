@@ -72,39 +72,39 @@ void Dijkstras::run_planner(
         std::vector<int> succ_ids;
         std::vector<double> costs;
         m_graph.get_succs(parent, &succ_ids, &costs);
-        auto iterSuccStateID = succ_ids.begin();
-        auto iterSuccCost = costs.begin();
+        auto iter_succ_state_id = succ_ids.begin();
+        auto iter_succ_cost = costs.begin();
 
-        while (iterSuccStateID != succ_ids.end() &&
-               iterSuccCost != costs.end()) {
-            // gValue is cost of parent + transition cost
+        while (iter_succ_state_id != succ_ids.end() &&
+               iter_succ_cost != costs.end()) {
+            // g_value is cost of parent + transition cost
             // from parent to successor
-            double gValue = cost_map[parent] + *iterSuccCost;
+            double g_value = cost_map[parent] + *iter_succ_cost;
 
             // if node is not in the priority queue, we need to add it
-            if (cost_map.find(*iterSuccStateID) == cost_map.end()) {
-                cost_map[*iterSuccStateID] = gValue;
-                Q.insert(*iterSuccStateID);
-                child_to_parent_map[*iterSuccStateID] = parent;
-            } else if (gValue < cost_map[*iterSuccStateID]) {
-                cost_map[*iterSuccStateID] = gValue;
-                Q.erase(*iterSuccStateID);
-                Q.insert(*iterSuccStateID);
-                child_to_parent_map[*iterSuccStateID] = parent;
+            if (cost_map.find(*iter_succ_state_id) == cost_map.end()) {
+                cost_map[*iter_succ_state_id] = g_value;
+                Q.insert(*iter_succ_state_id);
+                child_to_parent_map[*iter_succ_state_id] = parent;
+            } else if (g_value < cost_map[*iter_succ_state_id]) {
+                cost_map[*iter_succ_state_id] = g_value;
+                Q.erase(*iter_succ_state_id);
+                Q.insert(*iter_succ_state_id);
+                child_to_parent_map[*iter_succ_state_id] = parent;
             }
 
-            ++iterSuccStateID;
-            ++iterSuccCost;
+            ++iter_succ_state_id;
+            ++iter_succ_cost;
         }
     }
 
-      // if Q is empty, we need to call extract_path
-      if (Q.empty()) {
+    // if Q is empty, we need to call extract_path
+    if (Q.empty()) {
         extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
-      }
+    }
 
-      // set path parameter
-      m_graph.get_path_coordinates(path_state_ids, path);
+    // set path parameter
+    m_graph.get_path_coordinates(path_state_ids, path);
 }
 
 void Dijkstras::extract_path(
@@ -113,10 +113,8 @@ void Dijkstras::extract_path(
     const int& goal_id,
     std::vector<int> *path_state_ids) {
 
-    int x, y;
-
     if (goal_id == start_id) {
-      return;
+        return;
     }
 
     (*path_state_ids).push_back(goal_id);
@@ -125,12 +123,12 @@ void Dijkstras::extract_path(
 
     // loop till we find start or we reach end of map
     while (iter != child_to_parent_map.end()) {
-      (*path_state_ids).push_back(iter->second);
-      iter = child_to_parent_map.find(iter->second);
+        (*path_state_ids).push_back(iter->second);
+        iter = child_to_parent_map.find(iter->second);
     }
 
     std::reverse(path_state_ids->begin(), path_state_ids->end());
-  }
+}
 }  // namespace planners
 
 }  // namespace grid_planner
