@@ -34,66 +34,112 @@
 namespace grid_planner {
 namespace graphs {
 
-int Graph::set_start_state(const int& x, const int& y)
-{
-    // YOUR CODE HERE
-    return -1;
+int Graph::set_start_state(const int& x, const int& y) {
+    m_start_id = get_state_id(x, y);
+
+    if (is_valid_state(x, y)) {
+        return m_start_id;  // valid state
+    } else {
+        return -1;  // invalid state
+    }
 }
 
-int Graph::set_goal_state(const int& x, const int& y)
-{
-    // YOUR CODE HERE
-    return -1;
+int Graph::set_goal_state(const int& x, const int& y) {
+    m_goal_id = get_state_id(x, y);
+
+    if (is_valid_state(x, y)) {
+        return m_goal_id;  // valid state
+    } else {
+        return -1;  // invalid state
+    }
 }
 
 void Graph::get_succs(
     const int& source_state_id,
     std::vector<int> *succ_ids,
-    std::vector<double> *costs) const
-{
+    std::vector<double> *costs) const {
+
     assert(source_state_id < m_occupancy_grid.size());
 
-    // YOUR CODE HERE
+    int x_source, y_source;
+    get_coord_from_state_id(source_state_id, &x_source, &y_source);
+    int x_succ, y_succ;
+    int succ_state_id;
+    double succ_cost;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == 0 && j == 0) {  // current state, not a successor
+                continue;
+            }
+
+            x_succ = x_source + i;
+            y_succ = y_source + j;
+
+            if (!is_valid_state(x_succ, y_succ)) {
+                continue;  // successor is not valid
+            } else {
+                succ_state_id = get_state_id(x_succ, y_succ);
+                (*succ_ids).push_back(succ_state_id);
+
+                // transition cost i.e. cost from parent to successor
+                succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+                (*costs).push_back(succ_cost);
+            }
+        }
+    }
 }
 
 void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
-    std::vector<std::pair<int, int> > *path_coordinates) const
-{
-    // YOUR CODE HERE
+    std::vector<std::pair<int, int> > *path_coordinates) const {
+
+    for (auto iter = path_state_ids.begin(); iter != path_state_ids.end();
+         iter++) {
+        int x, y;
+        if (get_coord_from_state_id(*iter, &x, &y)) {
+            // coordinates are valid
+            (*path_coordinates).push_back(std::make_pair(x, y));
+        }
+    }
 }
 
-int Graph::get_state_id(const int& x, const int& y) const
-{
+int Graph::get_state_id(const int& x, const int& y) const {
     assert(x < m_width);
     assert(y < m_height);
 
-    // YOUR CODE HERE
-    return 0;
+    return x + y * m_width;
 }
 
-bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
-{
+bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const {
     assert(state_id < m_occupancy_grid.size());
 
-    // YOUR CODE HERE
-    return true;
+    *y = state_id / m_width;
+    *x = state_id - *y * m_width;
+
+    return is_valid_state(*x, *y);
 }
 
-bool Graph::is_valid_state(const int& x, const int& y) const
-{
-    // YOUR CODE HERE
-    return true;
+bool Graph::is_valid_state(const int& x, const int& y) const {
+    // check bounds (i.e. check value is valid)
+    if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
+        return false;
+    } else {  // check occupancy grid to see if cell is free
+        if (m_occupancy_grid[get_state_id(x, y)] == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 double Graph::get_action_cost(
         const int& source_x,
         const int& source_y,
         const int& succ_x,
-        const int& succ_y) const
-{
-    // YOUR CODE HERE
-    return 0;
+        const int& succ_y) const {
+    // Calculate Euclidean distance between the 2 points
+    return sqrt(pow(succ_x - source_x, 2) + pow(succ_y - source_y, 2));
 }
 
 }  // namespace graphs

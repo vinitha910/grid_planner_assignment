@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2019, Vinitha Ranganeni
 // All rights reserved.
 //
@@ -31,7 +31,7 @@
 #include <set>
 #include <cassert>
 #include <algorithm>
-#include <iostream>
+
 namespace grid_planner {
 namespace planners {
 
@@ -39,29 +39,96 @@ void Dijkstras::run_planner(
     const int& start_id,
     const int& goal_id,
     int* num_expansions,
-    std::vector<std::pair<int, int>> *path)
-{
-    // Create priority queue; I suggest using a set with with the custom
-    // comparator defined in dijkstra.h as your priority queue
-    std::set<int> Q; // You will need to change this line
+    std::vector<std::pair<int, int>> *path) {
+
+    // set of state IDs ordered by cost
+    CostMap cost_map;
+    CostMapComparator cost_map_comparator(cost_map);
+    std::set<int, CostMapComparator> Q(cost_map_comparator);
+
+    cost_map[start_id] = 0;
+    Q.insert(start_id);
+
+    std::vector<int> path_state_ids;  // close list
+
+    ChildToParentMap child_to_parent_map;  // empty map
 
     // While the queue is not empty
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
-        // YOUR CODE HERE
+        const int parent = *(Q.begin());
+        Q.erase(Q.begin());
+
+        if (parent == goal_id) {
+            extract_path(child_to_parent_map, start_id, goal_id,
+                         &path_state_ids);
+            // set path parameter
+            m_graph.get_path_coordinates(path_state_ids, path);
+            return;
+        }
+
+        std::vector<int> succ_ids;
+        std::vector<double> costs;
+        m_graph.get_succs(parent, &succ_ids, &costs);
+        auto iter_succ_state_id = succ_ids.begin();
+        auto iter_succ_cost = costs.begin();
+
+        while (iter_succ_state_id != succ_ids.end() &&
+               iter_succ_cost != costs.end()) {
+            // g_value is cost of parent + transition cost
+            // from parent to successor
+            double g_value = cost_map[parent] + *iter_succ_cost;
+
+            // if node is not in the priority queue, we need to add it
+            if (cost_map.find(*iter_succ_state_id) == cost_map.end()) {
+                cost_map[*iter_succ_state_id] = g_value;
+                Q.insert(*iter_succ_state_id);
+                child_to_parent_map[*iter_succ_state_id] = parent;
+            } else if (g_value < cost_map[*iter_succ_state_id]) {
+                cost_map[*iter_succ_state_id] = g_value;
+                Q.erase(*iter_succ_state_id);
+                Q.insert(*iter_succ_state_id);
+                child_to_parent_map[*iter_succ_state_id] = parent;
+            }
+
+            ++iter_succ_state_id;
+            ++iter_succ_cost;
+        }
     }
+
+    // if Q is empty, we need to call extract_path
+    if (Q.empty()) {
+        extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
+    }
+
+    // set path parameter
+    m_graph.get_path_coordinates(path_state_ids, path);
 }
 
 void Dijkstras::extract_path(
     const ChildToParentMap& child_to_parent_map,
     const int& start_id,
     const int& goal_id,
-    std::vector<int> *path_state_ids)
-{
-    // YOUR CODE HERE
-}
+    std::vector<int> *path_state_ids) {
 
+    if (goal_id == start_id) {
+        return;
+    }
+
+    (*path_state_ids).push_back(goal_id);
+
+    auto iter = child_to_parent_map.find(goal_id);
+
+    // loop till we find start or we reach end of map
+    while (iter != child_to_parent_map.end()) {
+        (*path_state_ids).push_back(iter->second);
+        iter = child_to_parent_map.find(iter->second);
+    }
+
+    std::reverse(path_state_ids->begin(), path_state_ids->end());
 }
-}
+}  // namespace planners
+
+}  // namespace grid_planner

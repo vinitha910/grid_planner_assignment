@@ -27,13 +27,13 @@
 // POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DIJKSTRAS_H_
-#define DIJKSTRAS_H_
+#ifndef DIJKSTRA_H_
+#define DIJKSTRA_H_
 
-#include "graph.h"
 #include <vector>
 #include <utility>
 #include <unordered_map>
+#include "graph.h"
 
 namespace grid_planner {
 namespace planners {
@@ -51,10 +51,10 @@ class CostMapComparator {
 
     bool operator()(const int& state_1,
                     const int& state_2) const {
-        // Given two states you need to write a comparator that determines
-        // how to order them
-        // YOUR CODE HERE (replace line below)
-        return true;
+        const auto state_1_iter = cost_map_.find(state_1);
+        const auto state_2_iter = cost_map_.find(state_2);
+
+        return state_1_iter->second <= state_2_iter->second;
     }
 
  private:
@@ -64,11 +64,10 @@ class CostMapComparator {
 // This class implements dijkstra's algorithm
 class Dijkstras {
  public:
-
     Dijkstras(
         const graphs::Graph& graph) : m_graph(graph) {}
 
-    ~Dijkstras() {};
+    ~Dijkstras() {}
 
     // Runs the planner from the start ID to the goal ID and fills in the
     // final path states into the path vector
@@ -87,10 +86,9 @@ class Dijkstras {
         std::vector<int> *path_state_ids);
 
     const graphs::Graph m_graph;
-
 };
 
-}
-}
+}  // namespace planners
+}  // namespace grid_planner
 
-#endif
+#endif  // DIJKSTRA_H_
