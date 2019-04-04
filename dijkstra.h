@@ -33,7 +33,6 @@
 #include <vector>
 #include <utility>
 #include <unordered_map>
-#include <iostream>
 #include "graph.h"
 
 namespace grid_planner {
@@ -52,29 +51,10 @@ class CostMapComparator {
 
     bool operator()(const int& state_1,
                     const int& state_2) const {
-        // Given two states you need to write a comparator that determines
-        // how to order them
+        const auto state_1Iter = cost_map_.find(state_1);
+        const auto state_2Iter = cost_map_.find(state_2);
 
-        // YOUR CODE HERE (replace line below)
-
-        // return does state 1 have lower cost than state 2?
-        // FUNCTOR: a class that overloads the () operator so that it can be called like a function!
-    const auto state_1Iter = cost_map_.find(state_1);
-    const auto state_2Iter = cost_map_.find(state_2);
-
-    if (state_1Iter == cost_map_.end()) {
-        std::cout << state_1 << " -> FUCK 1" << std::endl;
-    }
-
-    if (state_2Iter == cost_map_.end()) {
-        std::cout << state_2 << " -> FUCK 2" << std::endl;
-    }
-
-    return state_1Iter->second <= state_2Iter->second;
-
-        // END OF MY CODE
-
-        // return true;
+        return state_1Iter->second <= state_2Iter->second;
     }
 
  private:
