@@ -41,7 +41,6 @@ void Dijkstras::run_planner(
     int* num_expansions,
     std::vector<std::pair<int, int>> *path) {
 
-    // set of state IDs ordered by cost
     CostMap cost_map;
     CostMapComparator cost_map_comparator(cost_map);
     std::set<int, CostMapComparator> Q(cost_map_comparator);
@@ -49,52 +48,48 @@ void Dijkstras::run_planner(
     cost_map[start_id] = 0;
     Q.insert(start_id);
 
-    std::vector<int> path_state_ids;  // close list
+    ChildToParentMap child_to_parent_map;
 
-    ChildToParentMap child_to_parent_map;  // empty map
+    std::vector<int> path_state_ids;
 
     // While the queue is not empty
     while (!Q.empty()) {
-        // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
-        const int parent = *(Q.begin());
+        const int parent_id = *(Q.begin());
         Q.erase(Q.begin());
 
-        if (parent == goal_id) {
+        if (parent_id == goal_id) {
             extract_path(child_to_parent_map, start_id, goal_id,
                          &path_state_ids);
-            // set path parameter
             m_graph.get_path_coordinates(path_state_ids, path);
             return;
         }
 
         std::vector<int> succ_ids;
         std::vector<double> costs;
-        m_graph.get_succs(parent, &succ_ids, &costs);
-        auto iter_succ_state_id = succ_ids.begin();
-        auto iter_succ_cost = costs.begin();
+        m_graph.get_succs(parent_id, &succ_ids, &costs);
+        auto succ_state_id_iter = succ_ids.begin();
+        auto transition_cost_iter = costs.begin();
 
-        while (iter_succ_state_id != succ_ids.end() &&
-               iter_succ_cost != costs.end()) {
-            // g_value is cost of parent + transition cost
-            // from parent to successor
-            double g_value = cost_map[parent] + *iter_succ_cost;
+        while (succ_state_id_iter != succ_ids.end() &&
+               transition_cost_iter != costs.end()) {
+            double g_value = cost_map[parent_id] + *transition_cost_iter;
 
             // if node is not in the priority queue, we need to add it
-            if (cost_map.find(*iter_succ_state_id) == cost_map.end()) {
-                cost_map[*iter_succ_state_id] = g_value;
-                Q.insert(*iter_succ_state_id);
-                child_to_parent_map[*iter_succ_state_id] = parent;
-            } else if (g_value < cost_map[*iter_succ_state_id]) {
-                cost_map[*iter_succ_state_id] = g_value;
-                Q.erase(*iter_succ_state_id);
-                Q.insert(*iter_succ_state_id);
-                child_to_parent_map[*iter_succ_state_id] = parent;
+            if (cost_map.find(*succ_state_id_iter) == cost_map.end()) {
+                cost_map[*succ_state_id_iter] = g_value;
+                Q.insert(*succ_state_id_iter);
+                child_to_parent_map[*succ_state_id_iter] = parent_id;
+            } else if (g_value < cost_map[*succ_state_id_iter]) {
+                cost_map[*succ_state_id_iter] = g_value;
+                Q.erase(*succ_state_id_iter);
+                Q.insert(*succ_state_id_iter);
+                child_to_parent_map[*succ_state_id_iter] = parent_id;
             }
 
-            ++iter_succ_state_id;
-            ++iter_succ_cost;
+            ++succ_state_id_iter;
+            ++transition_cost_iter;
         }
     }
 
