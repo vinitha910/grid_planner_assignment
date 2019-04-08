@@ -94,9 +94,7 @@ void Dijkstras::run_planner(
     }
 
     // if Q is empty, we need to call extract_path
-    if (Q.empty()) {
-        extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
-    }
+    extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
 
     // set path parameter
     m_graph.get_path_coordinates(path_state_ids, path);
