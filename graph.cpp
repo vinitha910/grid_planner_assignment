@@ -76,11 +76,11 @@ void Graph::get_succs(
             if (!is_valid_state(x_succ, y_succ)) {
                 continue;  // successor is not valid
             }
-            int succ_state_id = get_state_id(x_succ, y_succ);
+            const int succ_state_id = get_state_id(x_succ, y_succ);
             (*succ_ids).push_back(succ_state_id);
 
             // transition cost i.e. cost from parent to successor
-            double succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+            const double succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
             (*costs).push_back(succ_cost);
         }
     }
