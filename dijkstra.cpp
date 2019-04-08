@@ -94,9 +94,7 @@ void Dijkstras::run_planner(
     }
 
     // if Q is empty, we need to call extract_path
-    if (Q.empty()) {
-        extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
-    }
+    extract_path(child_to_parent_map, start_id, goal_id, &path_state_ids);
 
     // set path parameter
     m_graph.get_path_coordinates(path_state_ids, path);
@@ -114,12 +112,12 @@ void Dijkstras::extract_path(
 
     (*path_state_ids).push_back(goal_id);
 
-    auto iter = child_to_parent_map.find(goal_id);
+    auto path_iter = child_to_parent_map.find(goal_id);
 
     // loop till we find start or we reach end of map
-    while (iter != child_to_parent_map.end()) {
-        (*path_state_ids).push_back(iter->second);
-        iter = child_to_parent_map.find(iter->second);
+    while (path_iter != child_to_parent_map.end()) {
+        (*path_state_ids).push_back(path_iter->second);
+        path_iter = child_to_parent_map.find(path_iter->second);
     }
 
     std::reverse(path_state_ids->begin(), path_state_ids->end());

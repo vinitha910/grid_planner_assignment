@@ -39,9 +39,9 @@ int Graph::set_start_state(const int& x, const int& y) {
 
     if (is_valid_state(x, y)) {
         return m_start_id;  // valid state
-    } else {
-        return -1;  // invalid state
-    }
+    } 
+
+    return -1;  // invalid state
 }
 
 int Graph::set_goal_state(const int& x, const int& y) {
