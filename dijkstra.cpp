@@ -69,6 +69,28 @@ void Dijkstras::run_planner(
         std::vector<int> succ_ids;
         std::vector<double> costs;
         m_graph.get_succs(parent_id, &succ_ids, &costs);
+  
+        assert(succ_ids.size() == costs.size());
+
+        for (int index = 0; index < succ_ids.size(); ++index) {
+            const int succ_state_id = succ_ids[index];
+            const double transition_cost = costs[index];
+
+            const double g_value = cost_map[parent_id] + transition_cost;
+
+            // if node is not in the priority queue, we need to add it
+            if (cost_map.find(succ_state_id) == cost_map.end()) {
+                cost_map[succ_state_id] = g_value;
+                Q.insert(succ_state_id);
+                child_to_parent_map[succ_state_id] = parent_id;
+            } else if (g_value < cost_map[succ_state_id]) {
+                cost_map[succ_state_id] = g_value;
+                Q.erase(succ_state_id);
+                Q.insert(succ_state_id);
+                child_to_parent_map[succ_state_id] = parent_id;
+            }
+        }
+/*        
         auto succ_state_id_iter = succ_ids.begin();
         auto transition_cost_iter = costs.begin();
 
@@ -91,6 +113,7 @@ void Dijkstras::run_planner(
             ++succ_state_id_iter;
             ++transition_cost_iter;
         }
+*/
     }
 
     // if Q is empty, we need to call extract_path
