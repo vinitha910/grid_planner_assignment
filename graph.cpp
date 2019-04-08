@@ -90,6 +90,16 @@ void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
     std::vector<std::pair<int, int> > *path_coordinates) const {
 
+    for (int index = 0; index < path_state_ids.size(); ++index) {
+        const int path_state_id = path_state_ids[index];
+        int x, y;
+        if (get_coord_from_state_id(path_state_id, &x, &y)) {
+            // coordinates are valid
+            (*path_coordinates).push_back(std::make_pair(x, y));
+        }
+    }
+
+    /*
     for (auto iter = path_state_ids.begin(); iter != path_state_ids.end();
          iter++) {
         int x, y;
@@ -98,6 +108,7 @@ void Graph::get_path_coordinates(
             (*path_coordinates).push_back(std::make_pair(x, y));
         }
     }
+    */
 }
 
 int Graph::get_state_id(const int& x, const int& y) const {
