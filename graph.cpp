@@ -39,7 +39,7 @@ int Graph::set_start_state(const int& x, const int& y) {
 
     if (is_valid_state(x, y)) {
         return m_start_id;  // valid state
-    } 
+    }
 
     return -1;  // invalid state
 }
@@ -69,18 +69,19 @@ void Graph::get_succs(
             if (i == 0 && j == 0) {  // current state, not a successor
                 continue;
             }
-            
+
             const int x_succ = x_source + i;
             const int y_succ = y_source + j;
 
             if (!is_valid_state(x_succ, y_succ)) {
                 continue;  // successor is not valid
             }
-            int succ_state_id = get_state_id(x_succ, y_succ);
+            const int succ_state_id = get_state_id(x_succ, y_succ);
             (*succ_ids).push_back(succ_state_id);
 
             // transition cost i.e. cost from parent to successor
-            double succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+            const double succ_cost = get_action_cost(x_source, y_source,
+                                                     x_succ, y_succ);
             (*costs).push_back(succ_cost);
         }
     }
@@ -90,10 +91,10 @@ void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
     std::vector<std::pair<int, int> > *path_coordinates) const {
 
-    for (auto iter = path_state_ids.begin(); iter != path_state_ids.end();
-         iter++) {
+    for (int index = 0; index < path_state_ids.size(); ++index) {
+        const int path_state_id = path_state_ids[index];
         int x, y;
-        if (get_coord_from_state_id(*iter, &x, &y)) {
+        if (get_coord_from_state_id(path_state_id, &x, &y)) {
             // coordinates are valid
             (*path_coordinates).push_back(std::make_pair(x, y));
         }
@@ -120,13 +121,12 @@ bool Graph::is_valid_state(const int& x, const int& y) const {
     // check bounds (i.e. check value is valid)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
         return false;
-    } else {  // check occupancy grid to see if cell is free
-        if (m_occupancy_grid[get_state_id(x, y)] == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
+    // check occupancy grid to see if cell is free
+    if (m_occupancy_grid[get_state_id(x, y)] == 0) {
+        return true;
+    }
+    return false;
 }
 
 double Graph::get_action_cost(
