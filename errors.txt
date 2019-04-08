@@ -1,8 +1,0 @@
-B
-A
-B
-B
-A
-A
-g++ -std=c++11 -c test_planner.cpp graph.h graph.cpp dijkstra.h dijkstra.cpp
-Makefile:2: recipe for target 'all' failed
