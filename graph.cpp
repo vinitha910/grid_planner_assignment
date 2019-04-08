@@ -70,9 +70,8 @@ void Graph::get_succs(
                 continue;
             }
             
-            int x_succ, y_succ;
-            x_succ = x_source + i;
-            y_succ = y_source + j;
+            const int x_succ = x_source + i;
+            const int y_succ = y_source + j;
 
             if (!is_valid_state(x_succ, y_succ)) {
                 continue;  // successor is not valid
