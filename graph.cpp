@@ -39,7 +39,7 @@ int Graph::set_start_state(const int& x, const int& y) {
 
     if (is_valid_state(x, y)) {
         return m_start_id;  // valid state
-    } 
+    }
 
     return -1;  // invalid state
 }
@@ -69,7 +69,7 @@ void Graph::get_succs(
             if (i == 0 && j == 0) {  // current state, not a successor
                 continue;
             }
-            
+
             const int x_succ = x_source + i;
             const int y_succ = y_source + j;
 
@@ -80,7 +80,8 @@ void Graph::get_succs(
             (*succ_ids).push_back(succ_state_id);
 
             // transition cost i.e. cost from parent to successor
-            const double succ_cost = get_action_cost(x_source, y_source, x_succ, y_succ);
+            const double succ_cost = get_action_cost(x_source, y_source,
+                                                     x_succ, y_succ);
             (*costs).push_back(succ_cost);
         }
     }
