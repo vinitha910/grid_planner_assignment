@@ -120,13 +120,12 @@ bool Graph::is_valid_state(const int& x, const int& y) const {
     // check bounds (i.e. check value is valid)
     if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
         return false;
-    } else {  // check occupancy grid to see if cell is free
-        if (m_occupancy_grid[get_state_id(x, y)] == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
+    // check occupancy grid to see if cell is free
+    if (m_occupancy_grid[get_state_id(x, y)] == 0) {
+        return true;
+    }
+    return false;
 }
 
 double Graph::get_action_cost(
