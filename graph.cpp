@@ -36,7 +36,6 @@ namespace graphs {
 
 int Graph::set_start_state(const int& x, const int& y) {
     m_start_id = get_state_id(x, y);
-
     if (is_valid_state(x, y)) {
         return m_start_id;  // valid state
     }
@@ -46,7 +45,6 @@ int Graph::set_start_state(const int& x, const int& y) {
 
 int Graph::set_goal_state(const int& x, const int& y) {
     m_goal_id = get_state_id(x, y);
-
     if (is_valid_state(x, y)) {
         return m_goal_id;  // valid state
     } else {
@@ -58,7 +56,6 @@ void Graph::get_succs(
     const int& source_state_id,
     std::vector<int> *succ_ids,
     std::vector<double> *costs) const {
-
     assert(source_state_id < m_occupancy_grid.size());
 
     int x_source, y_source;
@@ -90,7 +87,6 @@ void Graph::get_succs(
 void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
     std::vector<std::pair<int, int> > *path_coordinates) const {
-
     for (int index = 0; index < path_state_ids.size(); ++index) {
         const int path_state_id = path_state_ids[index];
         int x, y;

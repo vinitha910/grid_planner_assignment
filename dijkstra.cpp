@@ -75,15 +75,11 @@ void Dijkstras::run_planner(
         for (int index = 0; index < succ_ids.size(); ++index) {
             const int succ_state_id = succ_ids[index];
             const double transition_cost = costs[index];
-
             const double g_value = cost_map[parent_id] + transition_cost;
-
             if (cost_map.find(succ_state_id) == cost_map.end() ||
                 g_value < cost_map[succ_state_id]) {
                 cost_map[succ_state_id] = g_value;
-                if (g_value < cost_map[succ_state_id]) {
-                    Q.erase(succ_state_id);
-                }
+                Q.erase(succ_state_id);
                 Q.insert(succ_state_id);
                 child_to_parent_map[succ_state_id] = parent_id;
             }
@@ -110,7 +106,6 @@ void Dijkstras::extract_path(
     (*path_state_ids).push_back(goal_id);
 
     auto path_iter = child_to_parent_map.find(goal_id);
-
     // loop till we find start or we reach end of map
     while (path_iter != child_to_parent_map.end()) {
         (*path_state_ids).push_back(path_iter->second);
