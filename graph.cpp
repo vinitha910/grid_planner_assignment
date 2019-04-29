@@ -36,13 +36,21 @@ namespace graphs {
 
 int Graph::set_start_state(const int& x, const int& y)
 {
-    // YOUR CODE HERE
+    if (x >= 0 && y>= 0)
+    {
+        m_start_id = (x,y);
+        return m_start_id;
+    }
+
     return -1;
 }
 
 int Graph::set_goal_state(const int& x, const int& y)
 {
-    // YOUR CODE HERE
+    if (x >= 0 && y>= 0){
+        m_goal_id = (x,y);
+        return m_goal_id;
+    }
     return -1;
 }
 
@@ -54,6 +62,8 @@ void Graph::get_succs(
     assert(source_state_id < m_occupancy_grid.size());
 
     // YOUR CODE HERE
+    
+
 }
 
 void Graph::get_path_coordinates(
