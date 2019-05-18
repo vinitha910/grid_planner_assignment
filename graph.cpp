@@ -36,19 +36,18 @@ namespace graphs {
 
 int Graph::set_start_state(const int& x, const int& y)
 {
-    if (x >= 0 && y>= 0)
+    if (is_valid_state(x,y))
     {
-        m_start_id = (x,y);
+        m_start_id = get_state_id(x,y);
         return m_start_id;
     }
-
     return -1;
 }
 
 int Graph::set_goal_state(const int& x, const int& y)
 {
-    if (x >= 0 && y>= 0){
-        m_goal_id = (x,y);
+    if (is_valid_state(x,y)){
+        m_goal_id = get_state_id(x,y);
         return m_goal_id;
     }
     return -1;
@@ -61,16 +60,40 @@ void Graph::get_succs(
 {
     assert(source_state_id < m_occupancy_grid.size());
 
-    // YOUR CODE HERE
-    
 
+    int *x_so = 0;
+    int *y_so = 0;
+    get_coord_from_state_id(source_state_id, x_so, y_so);
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++) 
+        {
+            int* x_co = 0;
+            int* y_co = 0;
+            get_coord_from_state_id(source_state_id, x_co, y_co);
+            if (is_valid_state(*x_co+i, *y_co+j)) 
+        {
+            succ_ids->push_back(get_state_id(*x_co+i, *y_co+j));
+
+            double cost = get_action_cost(*x_so, *y_so, *x_co, *y_co);
+            costs->push_back(cost);
+        }
+        }
+    }
 }
 
 void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
     std::vector<std::pair<int, int> > *path_coordinates) const
 {
-    // YOUR CODE HERE
+    for(int i=0; i < path_state_ids.size(); i++)
+    {
+        int state_id = path_state_ids[i];
+        int* x = 0;
+        int* y = 0;
+        get_coord_from_state_id(state_id, x, y);
+        path_coordinates->push_back(std::make_pair(*x, *y));
+    }
 }
 
 int Graph::get_state_id(const int& x, const int& y) const
@@ -78,21 +101,33 @@ int Graph::get_state_id(const int& x, const int& y) const
     assert(x < m_width);
     assert(y < m_height);
 
-    // YOUR CODE HERE
-    return 0;
+    return y * m_width + x;
 }
 
 bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
 {
     assert(state_id < m_occupancy_grid.size());
 
-    // YOUR CODE HERE
-    return true;
+    int x_val = state_id % m_width;
+    int y_val = (state_id - x_val) / m_width;
+    *x = x_val;
+    *y = y_val;
+
+    return (is_valid_state(x_val, y_val));
+    
 }
 
 bool Graph::is_valid_state(const int& x, const int& y) const
 {
-    // YOUR CODE HERE
+    if (x < 0 || x > m_width || y < 0 || y > m_height)
+    {
+        return false;
+    }
+    //get state id to index id for occ grid to chek 1 for obstacle
+    int state_id = get_state_id(x, y);
+    if (m_occupancy_grid[state_id] == 1) {
+        return false;
+    }
     return true;
 }
 
@@ -102,8 +137,8 @@ double Graph::get_action_cost(
         const int& succ_x,
         const int& succ_y) const
 {
-    // YOUR CODE HERE
-    return 0;
+    //euclidean distance
+    return sqrt(pow(succ_x - source_x, 2) + pow(succ_y - source_y, 2));
 }
 
 }  // namespace graphs

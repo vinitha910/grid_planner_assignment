@@ -3,7 +3,7 @@
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// modification, are permitted provided that g following conditions are met:
 //
 //     1. Redistributions of source code must retain the above copyright notice
 //        this list of conditions and the following disclaimer.
@@ -39,18 +39,71 @@ void Dijkstras::run_planner(
     const int& start_id,
     const int& goal_id,
     int* num_expansions,
+    //pair(x,y)
     std::vector<std::pair<int, int>> *path)
 {
+    
+    //define costmap
+    CostMap map;
+    ChildToParentMap child_to_parent_map;
     // Create priority queue; I suggest using a set with with the custom
     // comparator defined in dijkstra.h as your priority queue
-    std::set<int> Q; // You will need to change this line
-
+    CostMapComparator comparator(map);
+    std::set<int, CostMapComparator> Q(comparator); // You will need to change this line
+    
     // While the queue is not empty
+    
     while (!Q.empty()) {
         // Pop and expand the next node in the priority queue
         (*num_expansions)++;
 
-        // YOUR CODE HERE
+        std::set<int, CostMapComparator>::iterator curr_state = Q.begin();
+        std::vector<int> *succesor_ids;
+        std::vector<double> *costs;
+        
+
+        if (*curr_state == start_id) 
+        {
+            map.insert(std::pair<int, double> (start_id, 0));
+        }
+        if (*curr_state  == goal_id) {
+
+            std::vector<int> *path_ids; 
+            extract_path(child_to_parent_map, start_id, goal_id, path_ids);
+            for (int i = 0; i < path_ids->size(); i++) {
+                //get_coordinate from state_id at each iteration
+                //convert coordinate into std::pair
+                //insert pair into *path
+                m_graph.get_path_coordinates(*path_ids,path);
+
+            }
+            break;
+        }
+        m_graph.get_succs(*curr_state, succesor_ids, costs);
+        //for each succesor:
+        //    check if in costmap: yes -> compare, no -> add to map with cost
+        for (int i = 0; i < succesor_ids->size(); i++)
+        {
+            int curr_id = succesor_ids->at(i);
+            //add to map (succesor, currrent state)
+            //child: succesor, parent: currr
+            //hence child to parent map
+            child_to_parent_map.insert(std::make_pair(curr_id, *curr_state));
+
+            CostMap::iterator map_cost = map.find(curr_id);
+            double succ_cost = costs->at(i);
+            double tmp_cost = succ_cost = map_cost->second + succ_cost;
+            if (map.find(curr_id) != map.end()) {
+                
+                if (succ_cost < map_cost->second) {
+                    map.insert(std::pair<int, double>(curr_id,succ_cost));
+                }
+            } else {
+                map.insert(std::pair<int, double>(curr_id, succ_cost + map_cost->second));
+            }
+        }
+        ++curr_state;
+
     }
 }
 
@@ -60,7 +113,14 @@ void Dijkstras::extract_path(
     const int& goal_id,
     std::vector<int> *path_state_ids)
 {
-    // YOUR CODE HERE
+    //will return path from start  to goal
+    int start = goal_id;
+    path_state_ids->push_back(start);
+    while(start != start_id){
+        int child = child_to_parent_map.at(start);
+        path_state_ids->push_back(child);
+        start =child;
+    }
 }
 
 }
