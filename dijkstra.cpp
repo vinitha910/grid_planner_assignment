@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "dijkstra.h"
+#include "./dijkstra.h"
 #include <set>
 #include <cassert>
 #include <algorithm>
@@ -46,62 +46,36 @@ void Dijkstras::run_planner(
     CostMapComparator comparator(map);
     std::set<int, CostMapComparator> Q(comparator);
     std::vector<int> path_ids;
-    
     Q.insert(start_id);
     map[start_id] = 0;
-    //std::cout << "initial" << '\n';
     while (!Q.empty()) {
         (*num_expansions)++;
         int curr_state = *(Q.begin());
         Q.erase(Q.begin());
         Q.erase(curr_state);
-        
-        //std::cout << "goal condition" << '\n';
         if (curr_state  == goal_id) {
             extract_path(child_to_parent_map, start_id, goal_id, &path_ids);
-            m_graph.get_path_coordinates(path_ids,path);
-            
-            //std::cout << *num_expansions << '\n';
+            m_graph.get_path_coordinates(path_ids, path);
             return;
         }
-        //std::cout << "condition passed" << '\n';
         std::vector<int> succesor_ids;
         std::vector<double> costs;
         m_graph.get_succs(curr_state, &succesor_ids, &costs);
-        
-        //std::cout << "expand" << '\n';
-        //for (auto iter = Q.begin(); iter != Q.end(); ++iter) {
-        //    std::cout << *iter % 15 << " <-x, y-> " << *iter / 15 << '\n';
-        //}
-        
         for (int idx = 0; idx < succesor_ids.size(); ++idx) {
             int succ_id = succesor_ids[idx];
-            //double curr_cost = map[curr_state];
             double new_cost = map[curr_state] + costs[idx];
-            
             if (map.find(succ_id) == map.end() || map[succ_id] > new_cost) {
                 child_to_parent_map[succ_id] = curr_state;
                 map[succ_id] = new_cost;
-                //std::cout << "succesor: " << '\n';
-                //std::cout << succ_id / 15 << '\n';
-                //std::cout << succ_id - (succ_id / 15) * 15 << '\n' << '\n';
-                //std::cout << new_cost << '\n';
                 assert(Q.find(curr_state) == Q.end());
-                
                 Q.erase(succ_id);
                 Q.insert(succ_id);
             }
-            
         }
-        //std::cout << "===== step ======" << '\n';
         assert(Q.find(curr_state) == Q.end());
-        //std::cout << "stop" << '\n';
-                
     }
     extract_path(child_to_parent_map, start_id, goal_id, &path_ids);
-
-    m_graph.get_path_coordinates(path_ids,path);
-    //std::cout << *num_expansions << '\n';
+    m_graph.get_path_coordinates(path_ids, path);
 }
 
 void Dijkstras::extract_path(
@@ -114,25 +88,13 @@ void Dijkstras::extract_path(
     }
 
     assert(child_to_parent_map.find(goal_id) != child_to_parent_map.end());
-
     auto parent = child_to_parent_map.find(goal_id);
     path_state_ids->push_back(goal_id);
-    while(parent != child_to_parent_map.end()){
+    while (parent != child_to_parent_map.end()) {
         path_state_ids->push_back(parent->second);
-        
-        //debugging
-        //check if anything being added
-        //std::cout << parent->second << '\n';
-        
-
         parent = child_to_parent_map.find(parent->second);
     }
     std::reverse(path_state_ids->begin(), path_state_ids->end());
-    
-    //debugging
-    //std::cout << child_to_parent_map.size() << '\n';
-    //std::cout << path_state_ids->size() << '\n';
 }
-
-} 
-} 
+}  // namespace planners
+}  // namespace grid_planner

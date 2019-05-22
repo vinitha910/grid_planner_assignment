@@ -101,7 +101,7 @@ class Graph {
     int m_goal_id;
 };
 
-}
-}
+}  // namespace graphs
+}  // namespace grid_planner
 
-#endif
+#endif  // GRAPH_H_

@@ -27,29 +27,24 @@
 // POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "graph.h"
+#include "./graph.h"
 #include <assert.h>
 #include <cmath>
-//below for debugging
-#include <iostream>
 
 namespace grid_planner {
 namespace graphs {
 
-int Graph::set_start_state(const int& x, const int& y)
-{
-    if (is_valid_state(x,y))
-    {
-        m_start_id = get_state_id(x,y);
+int Graph::set_start_state(const int& x, const int& y) {
+    if (is_valid_state(x, y)) {
+        m_start_id = get_state_id(x, y);
         return m_start_id;
     }
     return -1;
 }
 
-int Graph::set_goal_state(const int& x, const int& y)
-{
-    if (is_valid_state(x,y)){
-        m_goal_id = get_state_id(x,y);
+int Graph::set_goal_state(const int& x, const int& y) {
+    if (is_valid_state(x, y)) {
+        m_goal_id = get_state_id(x, y);
         return m_goal_id;
     }
     return -1;
@@ -58,10 +53,8 @@ int Graph::set_goal_state(const int& x, const int& y)
 void Graph::get_succs(
     const int& source_state_id,
     std::vector<int> *succ_ids,
-    std::vector<double> *costs) const
-{
+    std::vector<double> *costs) const {
     assert(source_state_id < m_occupancy_grid.size());
-
     int x_so, y_so;
     get_coord_from_state_id(source_state_id, &x_so, &y_so);
     for (int i = -1; i <= 1; i++) {
@@ -69,14 +62,10 @@ void Graph::get_succs(
             if (!(i == 0 && j == 0)) {
                 int x_succ = x_so + i;
                 int y_succ = y_so + j;
-                //get_coord_from_state_id(source_state_id, x_co, y_co);
                 if (is_valid_state(x_succ, y_succ)) {
-                    //std::cout << "succesor added" << '\n';
                     succ_ids->push_back(get_state_id(x_succ, y_succ));
-
                     double cost = get_action_cost(x_so, y_so, x_succ, y_succ);
                     costs->push_back(cost);
-                    //std::cout << x_co << '\n';
                 }
             }
         }
@@ -85,47 +74,37 @@ void Graph::get_succs(
 
 void Graph::get_path_coordinates(
     const std::vector<int>& path_state_ids,
-    std::vector<std::pair<int, int> > *path_coordinates) const
-{
-    for(int i=0; i < path_state_ids.size(); ++i) {
+    std::vector<std::pair<int, int> > *path_coordinates) const {
+    for (int i = 0; i < path_state_ids.size(); ++i) {
         int state_id = path_state_ids[i];
         int x, y;
         if (get_coord_from_state_id(state_id, &x, &y)) {
             path_coordinates->push_back(std::make_pair(x, y));
         }
-        
     }
 }
 
-int Graph::get_state_id(const int& x, const int& y) const
-{
+int Graph::get_state_id(const int& x, const int& y) const {
     assert(x < m_width);
     assert(y < m_height);
 
     return (y * m_width) + x;
 }
 
-bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const
-{
+bool Graph::get_coord_from_state_id(const int& state_id, int* x, int* y) const {
     assert(state_id < m_occupancy_grid.size());
-
-    //int x_val = state_id % m_width;
     int y_val = state_id / m_width;
     int x_val = state_id - y_val * m_width;
     *x = x_val;
     *y = y_val;
 
     return (is_valid_state(*x, *y));
-    
 }
 
-bool Graph::is_valid_state(const int& x, const int& y) const
-{
-    if (!(x >= 0 && x < m_width && y >= 0 && y < m_height))
-    {
+bool Graph::is_valid_state(const int& x, const int& y) const {
+    if (!(x >= 0 && x < m_width && y >= 0 && y < m_height)) {
         return false;
     }
-    //get state id to index id for occ grid to chek 1 for obstacle
     int state_id = get_state_id(x, y);
     if (m_occupancy_grid[state_id] == 0) {
         return true;
@@ -137,12 +116,9 @@ double Graph::get_action_cost(
         const int& source_x,
         const int& source_y,
         const int& succ_x,
-        const int& succ_y) const
-{
-    //euclidean distance
-    return sqrt(pow((double)(succ_x - source_x), 2) + pow((double)(succ_y - source_y), 2));
+        const int& succ_y) const {
+    return sqrt(pow((succ_x - source_x), 2) + pow((succ_y - source_y), 2));
 }
-
 }  // namespace graphs
 }  // namespace grid_planner
 
