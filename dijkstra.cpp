@@ -3,7 +3,7 @@
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// modification, are permitted provided that g following conditions are met:
 //
 //     1. Redistributions of source code must retain the above copyright notice
 //        this list of conditions and the following disclaimer.
@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "dijkstra.h"
+#include "./dijkstra.h"
 #include <set>
 #include <cassert>
 #include <algorithm>
@@ -39,29 +39,62 @@ void Dijkstras::run_planner(
     const int& start_id,
     const int& goal_id,
     int* num_expansions,
-    std::vector<std::pair<int, int>> *path)
-{
-    // Create priority queue; I suggest using a set with with the custom
-    // comparator defined in dijkstra.h as your priority queue
-    std::set<int> Q; // You will need to change this line
+    std::vector<std::pair<int, int>> *path) {
 
-    // While the queue is not empty
+    CostMap map;
+    ChildToParentMap child_to_parent_map;
+    CostMapComparator comparator(map);
+    std::set<int, CostMapComparator> Q(comparator);
+    std::vector<int> path_ids;
+    Q.insert(start_id);
+    map[start_id] = 0;
     while (!Q.empty()) {
-        // Pop and expand the next node in the priority queue
         (*num_expansions)++;
-
-        // YOUR CODE HERE
+        int curr_state = *(Q.begin());
+        Q.erase(Q.begin());
+        Q.erase(curr_state);
+        if (curr_state  == goal_id) {
+            extract_path(child_to_parent_map, start_id, goal_id, &path_ids);
+            m_graph.get_path_coordinates(path_ids, path);
+            return;
+        }
+        std::vector<int> succesor_ids;
+        std::vector<double> costs;
+        m_graph.get_succs(curr_state, &succesor_ids, &costs);
+        for (int idx = 0; idx < succesor_ids.size(); ++idx) {
+            int succ_id = succesor_ids[idx];
+            double new_cost = map[curr_state] + costs[idx];
+            if (map.find(succ_id) == map.end() || map[succ_id] > new_cost) {
+                child_to_parent_map[succ_id] = curr_state;
+                map[succ_id] = new_cost;
+                assert(Q.find(curr_state) == Q.end());
+                Q.erase(succ_id);
+                Q.insert(succ_id);
+            }
+        }
+        assert(Q.find(curr_state) == Q.end());
     }
+    extract_path(child_to_parent_map, start_id, goal_id, &path_ids);
+    m_graph.get_path_coordinates(path_ids, path);
 }
 
 void Dijkstras::extract_path(
     const ChildToParentMap& child_to_parent_map,
     const int& start_id,
     const int& goal_id,
-    std::vector<int> *path_state_ids)
-{
-    // YOUR CODE HERE
-}
+    std::vector<int> *path_state_ids) {
+    if (goal_id == start_id) {
+        return;
+    }
 
+    assert(child_to_parent_map.find(goal_id) != child_to_parent_map.end());
+    auto parent = child_to_parent_map.find(goal_id);
+    path_state_ids->push_back(goal_id);
+    while (parent != child_to_parent_map.end()) {
+        path_state_ids->push_back(parent->second);
+        parent = child_to_parent_map.find(parent->second);
+    }
+    std::reverse(path_state_ids->begin(), path_state_ids->end());
 }
-}
+}  // namespace planners
+}  // namespace grid_planner

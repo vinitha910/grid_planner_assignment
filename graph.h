@@ -50,7 +50,7 @@ class Graph {
           m_width(width),
           m_height(height) {}
 
-    ~Graph() {};
+    ~Graph() {}
 
     // Sets and returns the start state ID (m_start_id)
     // Returns -1 if the state is not valid
@@ -101,7 +101,7 @@ class Graph {
     int m_goal_id;
 };
 
-}
-}
+}  // namespace graphs
+}  // namespace grid_planner
 
-#endif
+#endif  // GRAPH_H_
