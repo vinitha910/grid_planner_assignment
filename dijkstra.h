@@ -53,8 +53,12 @@ class CostMapComparator {
                     const int& state_2) const {
         // Given two states you need to write a comparator that determines
         // how to order them
-        // YOUR CODE HERE (replace line below)
-        return true;
+        // int costDiff = cost_map_.at(state_1) - cost_map_.at(state_2);
+        // if (costDiff == 0) {
+        //     return state_1 < state_2;
+        // }
+        // return costDiff < 0;
+        return cost_map_.at(state_1) <= cost_map_.at(state_2);
     }
 
  private:
